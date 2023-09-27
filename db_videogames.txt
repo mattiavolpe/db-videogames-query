@@ -165,7 +165,14 @@ GROUP BY sh.id;
 
 
 5
-TODO
+SELECT sh.name AS "Software House name", a.name AS "Award name", v.name AS "Videogame name" 
+FROM award_videogame av 
+	JOIN awards a 
+		ON av.award_id = a.id 
+	JOIN videogames v 
+		ON av.videogame_id = v.id 
+	JOIN software_houses sh
+		ON v.software_house_id = sh.id;
 
 
 6
@@ -272,4 +279,16 @@ LIMIT 1;
 
 
 13
-TODO
+SELECT DISTINCT c.name
+FROM categories c
+	JOIN category_videogame cv 
+		ON c.id = cv.category_id
+	JOIN videogames v 
+		ON cv.videogame_id = v.id
+	JOIN (
+	    SELECT r.videogame_id, AVG(r.rating) AS avg_rating
+	    FROM reviews r
+	    GROUP BY r.videogame_id
+	) AS temp_table 
+		ON v.id = temp_table.videogame_id
+WHERE temp_table.avg_rating < 2;
